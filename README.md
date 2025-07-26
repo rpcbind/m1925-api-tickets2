@@ -236,20 +236,20 @@ function signRequest(array $data, string $key): string {
 
 **Code** : `200`
 
+Відповідь по запиту з reserve
 ```json
 {
-  "response":1
+    "result": 1,
+    "text": "The transaction is completed, but it is not known whether the reserve existed"
 }
 ```
+Відповідь по запиту з даними сектора, ряду та місця
 або помилка
 ```json
 {
-  "response":0
+    "result": 1
 }
 ```
-
-`guid` - унікальний ідентифікатор бронювання конкретного місця (отриманий при його бронюванні)
-`response` - ознака успішності операції
 
 ## Запит що встановлює ім'я та прізвище глядача для конкретного місця
 
@@ -276,10 +276,15 @@ function signRequest(array $data, string $key): string {
 }
 ```
 
+## Запит що формує інвойс для оплати на стороні партнера
+В одному інфвойсі можуть бути тільки місця з одного сектору
+В цьому випадку: у відповідь на повідомлення про оплату будуть видані коди квитків
 
-Запит що формує інвойс для оплати (???)
+**GET** : `https://api.1925.me/t2/c/addinvoice?seactor=15b9a5e8-6701-11f0-97a8-00505630580c&tel=380671234567&email=email@email.com&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
-**GET** : `https://api.1925.me/tickets2/addinvoice`
+`tel` - Телефон покупця (не обов'язкове поле) (/^[0-9]{8,15}$/)
+
+`email` - Email покупця (обов'язкове)
 
 ## Success Response
 
@@ -288,8 +293,8 @@ function signRequest(array $data, string $key): string {
 ```json
 {
   "response":1,
-  "guid":"53345751-cd8f-11ee-935f-00505630580c",
   "code":"TKHB000009",
+  "invoice":"15b9a5e8-6701-11f0-97a8-00505630580c",
   "total":1000
 }
 ```
@@ -297,19 +302,22 @@ function signRequest(array $data, string $key): string {
 ```json
 {
   "response":0,
-  "text":"Якась помилка"
+  "error":"Якась помилка"
 }
 ```
 
-`guid` - унікальний ідентифікатор ордеру (внутрішній)
 `code` - унікальний код інвойсу (публічний)
 `total` - сума інвойсу
-`response` - ознака успішності операції
-`text` - текстове пояснення результату або помилки
 
-Запит що підтверджує факт оплати інвойсу
+## Запит що формує інвойс для оплати на стороні клубу
+В одному інфвойсі можуть бути тільки місця з одного сектору
+В цьому випадку далі весь процес проходить на боці клубу (оплата, формування та відправка квитків)
 
-**GET** : `https://api.1925.me/tickets2/paidinvoice?guid=53345751-cd8f-11ee-935f-00505630580c`
+**GET** : `https://api.1925.me/t2/c/payinvoice?seactor=15b9a5e8-6701-11f0-97a8-00505630580c&tel=380671234567&email=email@email.com&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
+
+`tel` - Телефон покупця (не обов'язкове поле) (/^[0-9]{8,15}$/)
+
+`email` - Email покупця (обов'язкове)
 
 ## Success Response
 
@@ -318,7 +326,47 @@ function signRequest(array $data, string $key): string {
 ```json
 {
   "response":1,
-  "tickets":["TUVW00443301533785","TMHE00131701744332"],
+  "payurl":"https://pay.1925.me/TKHB000009"
+}
+```
+або помилка
+```json
+{
+  "response":0,
+  "error":"Якась помилка"
+}
+```
+`payurl` - адреса на яку необхідно перенаправити покупця
+
+## Запит що підтверджує факт успішної оплати інвойсу на стороні партнера
+
+**GET** : `https://api.1925.me/t2/c/setpaid?invoice=53345751-cd8f-11ee-935f-00505630580c&token=[token]&pid=AB1234`
+
+## Success Response
+
+**Code** : `200`
+
+```json
+{
+    "result": 1,
+    "tickets": [
+        {
+            "code": "TKDV00003001706307",
+            "sector": "054f9127-cd96-11ee-935f-00505630580c",
+            "row": 0,
+            "seat": 0,
+            "firstname": "",
+            "lastname": ""
+        },
+        {
+            "code": "TKDV00003002393390",
+            "sector": "054f9127-cd96-11ee-935f-00505630580c",
+            "row": 0,
+            "seat": 0,
+            "firstname": "",
+            "lastname": ""
+        }
+    ]
 }
 ```
 або помилка
@@ -329,7 +377,5 @@ function signRequest(array $data, string $key): string {
 }
 ```
 
-`tickets` - унікальний код квитка (який друкується на квитку у вигляді Code128 або QR з текстом, для сканування в нашій системі)
-`response` - ознака успішності операції
-`text` - текстове пояснення результату або помилки
+`code` - унікальний код квитка (який друкується на квитку у вигляді Code128 або QR з текстом, для сканування в нашій системі)
 
