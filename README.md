@@ -210,22 +210,21 @@ function signRequest(array $data, string $key): string {
 
 ```json
 {
-  "guid":"53345751-cd8f-11ee-935f-00505630580c",
-  "response":1,
-  "text":"Місце успішно заброньоване"
+    "result": 1,
+    "uuid": "691495fa-6a6a-11f0-994e-00505630580c",
+    "starttimer": "2025-07-27 00:49:31"
 }
 ```
 або помилка
 ```json
 {
   "response":0,
-  "text":"Місце вже заброньоване або продане"
+  "error":"Місце вже заброньоване або продане"
 }
 ```
 
-`guid` - унікальний ідентифікатор бронювання конкретного місця
-`response` - ознака успішності операції
-`text` - текстове пояснення результату або помилки
+`uuid` - унікальний ідентифікатор бронювання конкретного місця
+`starttimer` - таймер відліку 15 хвилин для здійснення оплати. Через 15 хвилин бронь буде анульована. Якщо це друге та настпуні місця в цій сесії, таймер буде рахуватись від першого місця
 
 ## Запит що звілюнює місце з кошика
 
@@ -254,23 +253,26 @@ function signRequest(array $data, string $key): string {
 
 ## Запит що встановлює ім'я та прізвище глядача для конкретного місця
 
-**GET** : `https://api.1925.me/tickets2/g/setname?reserve=53345751-cd8f-11ee-935f-00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
+**GET** : `https://api.1925.me/t2/g/setname?reserve=53345751-cd8f-11ee-935f-00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
 або
-**GET** : `https://api.1925.me/tickets2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
+**GET** : `https://api.1925.me/t2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
 
 ## Success Response
 
 **Code** : `200`
 
+Відповідь по запиту з reserve
 ```json
 {
-  "response":1
+    "result": 1,
+    "text": "The transaction is completed, but it is not known whether the reserve existed"
 }
 ```
+Відповідь по запиту з даними сектора, ряду та місця
 або помилка
 ```json
 {
-  "response":0
+    "result": 1
 }
 ```
 
