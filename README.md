@@ -54,7 +54,7 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getevents`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -96,7 +96,7 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getsectors?event=53345751-cd8f-11ee-935f-00505630580c`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -139,7 +139,7 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getseats?sector=53345751-cd8f-11ee-935f-00505630580c`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -176,7 +176,7 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getfreeseats?sector=53345751-cd8f-11ee-935f-00505630580c`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -204,7 +204,7 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/putseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat=1&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -232,7 +232,7 @@ function signRequest(array $data, string $key): string {
 або
 **GET** : `https://api.1925.me/tickets2/g/unputseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -257,7 +257,7 @@ function signRequest(array $data, string $key): string {
 або
 **GET** : `https://api.1925.me/t2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -286,7 +286,7 @@ function signRequest(array $data, string $key): string {
 
 `email` - Email покупця (обов'язкове)
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -319,7 +319,7 @@ function signRequest(array $data, string $key): string {
 
 `email` - Email покупця (обов'язкове)
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
@@ -342,7 +342,7 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/c/setpaid?invoice=53345751-cd8f-11ee-935f-00505630580c&token=[token]&pid=AB1234`
 
-## Success Response
+**Success Response**
 
 **Code** : `200`
 
