@@ -1,21 +1,44 @@
 # m1925-tickets2-api
-api.1925.me/tickets2 description
+api.1925.me/t2 description
 
 ## Common values
 
 `[token]` - Токен для підпису важливих подій (покласти місце в кошик, зняти з резерву, оплата)
+Формуєьтся функцією, де $data це масив параметрів, що передаються в рядку URL (після знаку "?", за виключенням самого token)
 
-`event` - Подія (матч), ключ GUID (varchar(36))
-`sector` - Сектор в події, ключ GUID (varchar(36))
+```php
+function signRequest(array $data, string $key): string {
+    // Сортуємо масив для стабільності
+    ksort($data);
+    // Перетворюємо масив у рядок формату key1=value1&key2=value2...
+    $query = http_build_query($data, '', '&', PHP_QUERY_RFC3986);
+    // Генеруємо HMAC-підпис за допомогою SHA256
+    $signature = hash_hmac('sha256', $query, $key);
+    return $signature;
+}
+```
+
+`pid` - Унікальний ідентифікатор партнера (varchar(6)) ('/^[A-Za-z0-9]+$/') 
+`key` - Унікальний ключ для підпису запитів (varchar(36)) ('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i')
+
+`invoice` - Рахунок на оплату, ключ UUID (varchar(36)) ('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i')
+`price` - Ціна квитка (float(15,2))
+`event` - Подія (матч), ключ UUID (varchar(36)) ('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i')
+`sector` - Сектор в події, ключ UUID (varchar(36)) ('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i')
+`reserve` - Унікальний номер бронювання конкретного місця, до оплати, ключ UUID (varchar(36)) ('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i')
 `row` - Ряд в секторі, tinyint(1)
 `seat` - Місце в секторі, tinyint(1)
-`sid` - Ідентифікатор сесії для події бронювання та оплати, varchar(50)
+`sid` - Ідентифікатор сесії для події бронювання та оплати, уникальний в рамках одного кошика покупця, varchar(50) ('/^[A-Za-z0-9\-]+$/') 
+`firstname` - Ім'я глядача, varchar(60) ('/^[A-Za-zА-Яа-яЁёІіЇїЄє\'\s\-]{2,60}$/u) 
+`lastname` - Прізвище глядача, varchar(60) ('/^[A-Za-zА-Яа-яЁёІіЇїЄє\'\s\-]{2,60}$/u) 
+`ticketid` - Ідентифікатор квитка, varchar(18), формат для баркоду Code128 або текст для QR, які скануються в нашій системі (Формат 4 латинські символи + 14 цифр)
+інші ключі що використовуються будуть описані додатково під конкретними запитами
 
 ## Request for information
 
-Запит що вертає список подій
+## Запит що вертає список подій
 
-**GET** : `https://api.1925.me/tickets2/getevents`
+**GET** : `https://api.1925.me/t2/g/getevents`
 
 ## Success Response
 
@@ -23,7 +46,7 @@ api.1925.me/tickets2 description
 
 ```json
 {
-  "guid":"53345751-cd8f-11ee-935f-00505630580c",
+  "event":"53345751-cd8f-11ee-935f-00505630580c",
   "start":"2025-07-25 15:30:00",
   "stop":"2025-08-04 19:45:00",
   "name":"Металіст 1925 - Оболонь",
@@ -31,15 +54,14 @@ api.1925.me/tickets2 description
 }
 ```
 
-`guid` - унікальний іжентифікатор події
 `start` - час старту публічного продажу
 `stop` - час коли продаж зупиняється
 `name` - назва події
 `date` - дата та час початку події
 
-Запит що вертає список секторів в події
+## Запит що вертає список секторів в події
 
-**GET** : `https://api.1925.me/tickets2/getsectors?event=53345751-cd8f-11ee-935f-00505630580c`
+**GET** : `https://api.1925.me/t2/g/getsectors?event=53345751-cd8f-11ee-935f-00505630580c`
 
 ## Success Response
 
@@ -47,7 +69,7 @@ api.1925.me/tickets2 description
 
 ```json
 {
-  "guid":"53345751-cd8f-11ee-935f-00505630580c",
+  "uuid":"53345751-cd8f-11ee-935f-00505630580c",
   "name":"Металіст 1925 - Оболонь",
   "order":1,
   "price":"100.00",
@@ -55,15 +77,14 @@ api.1925.me/tickets2 description
 }
 ```
 
-`guid` - унікальний іжентифікатор сектора
 `name` - назва сектору
 `order` - порядок сотрування в списку
 `price` - ціна квитка
 `available` - кількість доступних для продажу місць на момент запиту
 
-Запит що вертає список список всіх місць в секторі
+## Запит що вертає список список всіх місць в секторі
 
-**GET** : `https://api.1925.me/tickets2/getseats?sector=53345751-cd8f-11ee-935f-00505630580c`
+**GET** : `https://api.1925.me/t2/g/getseats?sector=53345751-cd8f-11ee-935f-00505630580c`
 
 ## Success Response
 
@@ -80,9 +101,9 @@ api.1925.me/tickets2 description
 `available` - ознака доступності місця
 `take` - ознака що місце зайняте
 
-Запит що вертає список список вільних місць в секторі (на момент запиту)
+## Запит що вертає список список вільних місць в секторі
 
-**GET** : `https://api.1925.me/tickets2/getfreeseats?sector=53345751-cd8f-11ee-935f-00505630580c`
+**GET** : `https://api.1925.me/t2/g/getfreeseats?sector=53345751-cd8f-11ee-935f-00505630580c`
 
 ## Success Response
 
@@ -97,9 +118,9 @@ api.1925.me/tickets2 description
 `row` - номер ряду
 `seat` - номер місця
 
-Запит що кладе місце в кошик
+## Запит що кладе місце в кошик
 
-**GET** : `https://api.1925.me/tickets2/putseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat=1&sid=02c62aa968d811f0994e00505630580c`
+**GET** : `https://api.1925.me/t2/g/putseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat=1&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
 ## Success Response
 
@@ -124,9 +145,11 @@ api.1925.me/tickets2 description
 `response` - ознака успішності операції
 `text` - текстове пояснення результату або помилки
 
-Запит що звілюнює місце з кошика
+## Запит що звілюнює місце з кошика
 
-**GET** : `https://api.1925.me/tickets2/unputseat?guid=53345751-cd8f-11ee-935f-00505630580c&sid=02c62aa968d811f0994e00505630580c`
+**GET** : `https://api.1925.me/tickets2/g/unputseat?reserve=53345751-cd8f-11ee-935f-00505630580c&token=[token]&pid=AB1234`
+або
+**GET** : `https://api.1925.me/tickets2/g/unputseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
 ## Success Response
 
@@ -146,6 +169,29 @@ api.1925.me/tickets2 description
 
 `guid` - унікальний ідентифікатор бронювання конкретного місця (отриманий при його бронюванні)
 `response` - ознака успішності операції
+
+## Запит що встановлює ім'я та прізвище глядача для конкретного місця
+
+**GET** : `https://api.1925.me/tickets2/g/setname?reserve=53345751-cd8f-11ee-935f-00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
+або
+**GET** : `https://api.1925.me/tickets2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
+
+## Success Response
+
+**Code** : `200`
+
+```json
+{
+  "response":1
+}
+```
+або помилка
+```json
+{
+  "response":0
+}
+```
+
 
 Запит що формує інвойс для оплати (???)
 
