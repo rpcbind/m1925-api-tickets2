@@ -389,6 +389,8 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/c/setpaid?invoice=53345751-cd8f-11ee-935f-00505630580c&token=[token]&pid=AB1234`
 
+Також за цим запитом можна повторно отримати дані квитків
+
 **Success Response**
 
 **Code** : `200`
