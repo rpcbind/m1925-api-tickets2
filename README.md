@@ -40,7 +40,7 @@ function signRequest(array $data, string $key): string {
 
 `seat` - Місце в секторі, tinyint(1)
 
-`sid` - Ідентифікатор сесії для події бронювання та оплати, уникальний в рамках одного кошика покупця, varchar(50) ('/^[A-Za-z0-9\-]+$/') 
+`sid` - Ідентифікатор сесії для події бронювання та оплати, уникальний в рамках одного кошика покупця, varchar(50) ('/^[A-Za-z0-9\-]+$/') Бажано використовувати мінімум 36 символів та додавати префікс у вигляді pid
 
 `firstname` - Ім'я глядача, varchar(60) ('/^[A-Za-zА-Яа-яЁёІіЇїЄє\'\s\-]{2,60}$/u) 
 
@@ -279,13 +279,14 @@ function signRequest(array $data, string $key): string {
 ```json
 {
     "result": 1,
-    "text": "The transaction is completed, but it is not known whether the reserve existed"
+    "text": "Reserve deleted"
 }
 ```
-Відповідь по запиту з даними сектора, ряду та місця
+Або помилка
 ```json
 {
-    "result": 1
+    "result": 0,
+    "error": "Reserve not found"
 }
 ```
 
@@ -306,13 +307,14 @@ function signRequest(array $data, string $key): string {
 ```json
 {
     "result": 1,
-    "text": "The transaction is completed, but it is not known whether the reserve existed"
+    "text": "Reserve updated"
 }
 ```
-Відповідь по запиту з даними сектора, ряду та місця
+Або помилка
 ```json
 {
-    "result": 1
+    "result": 0,
+    "error": "Reserve not found"
 }
 ```
 
@@ -322,7 +324,7 @@ function signRequest(array $data, string $key): string {
 В одному інфвойсі можуть бути тільки місця з одного сектору
 В цьому випадку: у відповідь на повідомлення про оплату будуть видані коди квитків
 
-**GET** : `https://api.1925.me/t2/c/addinvoice?seactor=15b9a5e8-6701-11f0-97a8-00505630580c&tel=380671234567&email=email@email.com&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
+**GET** : `https://api.1925.me/t2/c/addinvoice?sector=15b9a5e8-6701-11f0-97a8-00505630580c&tel=380671234567&email=email@email.com&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
 `tel` - Телефон покупця (не обов'язкове поле) (/^[0-9]{8,15}$/)
 
