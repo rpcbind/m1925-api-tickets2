@@ -128,20 +128,23 @@ function signRequest(array $data, string $key): string {
             "btcolor": "#ffffff",
             "ord": 10,
             "price": 100,
+            "pricestd": 100,
+            "pricemd": 150,
             "qty": 483,
-            "remains": 473
+            "remains": 470
         },
         {
-            "sector": "15b9a5e8-6701-11f0-97a8-00505630580c",
-            "name": "VIP-SILVER",
-            "bcolor": "#D3D3D3",
-            "btcolor": "#000000",
-            "ord": 13,
-            "price": 300,
-            "qty": 128,
-            "remains": 98
-        }
-    ]
+            "sector": "8f21b229-6701-11f0-97a8-00505630580c",
+            "name": 9,
+            "bcolor": "#204B9A",
+            "btcolor": "#ffffff",
+            "ord": 11,
+            "price": 150,
+            "pricestd": 150,
+            "pricemd": 200,
+            "qty": 506,
+            "remains": 504
+        }  ]
 }
 ```
 
@@ -153,7 +156,11 @@ function signRequest(array $data, string $key): string {
 
 `ord` - порядок сотрування в списку
 
-`price` - ціна квитка. Зверніть увагу: в день матчу ціна квитка автоматично змінюється в 00:00
+`price` - діюча/актуальна ціна квитка на момент запиту. Зверніть увагу: в день матчу ціна квитка автоматично змінюється в 00:00
+
+`pricestd` - Стандартна ціна квитка яка діє при попередньому продажу (крім дня матчу)
+
+`pricemd` - Ціна квитка в матчдей
 
 `qty` - загальна кількість місць в секторі
 
