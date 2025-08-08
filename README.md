@@ -70,6 +70,7 @@ function signRequest(array $data, string $key): string {
     "events": [
         {
             "event": "be198bf5-4a86-11f0-96f1-00505630580c",
+            "public": 1,
             "start": "2025-07-25 10:00:00",
             "stop": "2025-08-04 19:45:00",
             "date": "2025-08-04 18:00:00",
@@ -85,6 +86,8 @@ function signRequest(array $data, string $key): string {
     ]
 }
 ```
+
+`public` - ознака що продаж на подію відкритий (0/1)
 
 `start` - час старту публічного продажу
 
