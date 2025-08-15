@@ -294,13 +294,13 @@ function signRequest(array $data, string $key): string {
 ```
 
 
-## Запит що встановлює ім'я та прізвище глядача для конкретного місця
+## Запит що встановлює ім'я та прізвище глядача для конкретного місця (та додатково документ для безкоштовного квитка)
 
-**GET** : `https://api.1925.me/t2/g/setname?reserve=53345751-cd8f-11ee-935f-00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
+**GET** : `https://api.1925.me/t2/g/setname?reserve=53345751-cd8f-11ee-935f-00505630580c&firstname=Ivan&lastname=Ivanov&doc=123465&token=[token]&pid=AB1234`
 
 або
 
-**GET** : `https://api.1925.me/t2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&token=[token]&pid=AB1234`
+**GET** : `https://api.1925.me/t2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&doc=123465&token=[token]&pid=AB1234`
 
 **Success Response**
 
