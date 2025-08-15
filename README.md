@@ -132,6 +132,7 @@ function signRequest(array $data, string $key): string {
             "bcolor": "#A5529A",
             "btcolor": "#ffffff",
             "ord": 10,
+            "docfree": 1,
             "price": 100,
             "pricestd": 100,
             "pricemd": 150,
@@ -144,6 +145,7 @@ function signRequest(array $data, string $key): string {
             "bcolor": "#204B9A",
             "btcolor": "#ffffff",
             "ord": 11,
+            "docfree": 0,
             "price": 150,
             "pricestd": 150,
             "pricemd": 200,
@@ -160,6 +162,8 @@ function signRequest(array $data, string $key): string {
 `btcolor` - Колір тексту на фоні сектора
 
 `ord` - порядок сотрування в списку
+
+`docfree` - ознака доступності оформлення в цей сектор безкоштовних квитків по посвідченню
 
 `price` - діюча/актуальна ціна квитка на момент запиту. Зверніть увагу: в день матчу ціна квитка автоматично змінюється в 00:00
 
