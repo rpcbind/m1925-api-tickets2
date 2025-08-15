@@ -415,7 +415,8 @@ function signRequest(array $data, string $key): string {
             "row": 0,
             "seat": 0,
             "firstname": "",
-            "lastname": ""
+            "lastname": "",
+            "doc": ""
         },
         {
             "code": "TKDV00003002393390",
@@ -423,7 +424,8 @@ function signRequest(array $data, string $key): string {
             "row": 0,
             "seat": 0,
             "firstname": "",
-            "lastname": ""
+            "lastname": "",
+            "doc": ""
         }
     ]
 }
