@@ -317,7 +317,8 @@ function signRequest(array $data, string $key): string {
 ```json
 {
     "result": 1,
-    "text": "Reserve updated"
+    "text": "Reserve updated",
+    "isFree": 0
 }
 ```
 Або помилка
@@ -328,6 +329,7 @@ function signRequest(array $data, string $key): string {
 }
 ```
 
+`isFree` - ознака, що резерв створено по посвідченню (0/1)
 
 ## Запит що формує інвойс для оплати на стороні партнера
 
