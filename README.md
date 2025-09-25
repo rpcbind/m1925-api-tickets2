@@ -46,13 +46,15 @@ function signRequest(array $data, string $key): string {
 
 `lastname` - Прізвище глядача, varchar(60) ('/^[A-Za-zА-Яа-яЁёІіЇїЄє\'\s\-]{2,60}$/u) 
 
-`doc` - Номер документу посвідчення УБД або пенсіонера на безкоштовний квиток, varchar(8) ('/^\d{4,8}$/') 
+`doc` - Номер документу посвідчення УБД або пенсіонера на безкоштовний квиток, varchar(10) ('/^\d{6}$|^\d{10}$/). Посвідчення УБД - 6 цифр, пенсійне посвідчення 6 або 10 цифр
 
 `ticketid` - Ідентифікатор квитка, varchar(18), формат для баркоду Code128 або текст для QR, які скануються в нашій системі (Формат 4 латинські символи + 14 цифр)
 
 `result` - Ознака успішності виконання запиту (0/1)
 
 інші ключі що використовуються будуть описані додатково під конкретними запитами
+
+**Зверніть увагу!** Якщо поле вказано в запиті воно не має бути порожнім, це викличе помилку валіадції!
 
 **Зверніть увагу!** Функціонал оформлення безкоштовних квитків по посвідченню УБД або пенсіонера використвується виключно в оффлайн касах, де касир може (забов'язаний!) перевірити наданий оригінал посвідчення перед оформленням! Використовувати це для онлайн оформлень - забороняється!
 
@@ -119,6 +121,8 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getsectors?event=53345751-cd8f-11ee-935f-00505630580c`
 
+**Всі поля запиту обов'язкові**
+
 **Success Response**
 
 **Code** : `200`
@@ -181,6 +185,8 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getseats?sector=53345751-cd8f-11ee-935f-00505630580c`
 
+**Всі поля запиту обов'язкові**
+
 **Success Response**
 
 **Code** : `200`
@@ -220,6 +226,8 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/t2/g/getfreeseats?sector=53345751-cd8f-11ee-935f-00505630580c`
 
+**Всі поля запиту обов'язкові**
+
 **Success Response**
 
 **Code** : `200`
@@ -248,6 +256,8 @@ function signRequest(array $data, string $key): string {
 ## Запит що кладе місце в кошик
 
 **GET** : `https://api.1925.me/t2/g/putseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat=1&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
+
+**Всі поля запиту обов'язкові**
 
 **Success Response**
 
@@ -281,6 +291,8 @@ function signRequest(array $data, string $key): string {
 
 **GET** : `https://api.1925.me/tickets2/g/unputseat?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&token=[token]&pid=AB1234`
 
+**Всі поля запиту обов'язкові**
+
 **Success Response**
 
 **Code** : `200`
@@ -308,6 +320,8 @@ function signRequest(array $data, string $key): string {
 або
 
 **GET** : `https://api.1925.me/t2/g/setname?sector=53345751-cd8f-11ee-935f-00505630580c&row=1&seat&=1&sid=02c62aa968d811f0994e00505630580c&firstname=Ivan&lastname=Ivanov&doc=123465&token=[token]&pid=AB1234`
+
+**Всі поля запиту обов'язкові, крім - doc**
 
 **Success Response**
 
@@ -341,6 +355,8 @@ function signRequest(array $data, string $key): string {
 `tel` - Телефон покупця (не обов'язкове поле) (/^[0-9]{8,15}$/)
 
 `email` - Email покупця (обов'язкове)
+
+**Всі поля запиту обов'язкові, крім - tel**
 
 **Success Response**
 
@@ -383,6 +399,8 @@ function signRequest(array $data, string $key): string {
 
 `email` - Email покупця (обов'язкове)
 
+**Всі поля запиту обов'язкові, крім - tel**
+
 **Success Response**
 
 **Code** : `200`
@@ -408,6 +426,8 @@ function signRequest(array $data, string $key): string {
 **GET** : `https://api.1925.me/t2/c/setpaid?invoice=53345751-cd8f-11ee-935f-00505630580c&token=[token]&pid=AB1234`
 
 Також за цим запитом можна повторно отримати дані квитків
+
+**Всі поля запиту обов'язкові**
 
 **Success Response**
 
@@ -454,6 +474,8 @@ function signRequest(array $data, string $key): string {
 Інвойс з квиткамаи по яким було вже здійснено вхід - видалити неможливо
 
 **GET** : `https://api.1925.me/t2/c/unpaid?invoice=53345751-cd8f-11ee-935f-00505630580c&token=[token]&pid=AB1234`
+
+**Всі поля запиту обов'язкові**
 
 **Success Response**
 
