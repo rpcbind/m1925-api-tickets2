@@ -548,3 +548,6 @@ function signRequest(array $data, string $key): string {
 
 Запит вертає або 1 - успішне видалення, або 0 та опис помилки
 
+## Errors
+
+`G00`/ `C00` - Сервер отримав порожній запит
